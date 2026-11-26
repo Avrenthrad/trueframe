@@ -47,7 +47,8 @@ export function DealsGrid({ deals }: { deals: DealItem[] }) {
   const [region, setRegion] = useState<"all" | "AU" | "Global">("AU");
   const [retailer, setRetailer] = useState<string | null>(null);
   const retailers = useMemo(() => [...new Set(deals.map((d) => d.retailer))], [deals]);
-  const list = deals.filter((d) => (region === "all" || d.region === region) && (!retailer || d.retailer === retailer));
+  const show = (d: DealItem) => (region === "all" || d.region === region) && (!retailer || d.retailer === retailer);
+  const list = deals.filter(show);
 
   const chip = (on: boolean) =>
     `border px-3 py-1 text-[13px] font-semibold transition-colors ${on ? "border-purple bg-purple text-on-purple" : "border-line bg-surface text-muted hover:text-fg"}`;
@@ -56,21 +57,21 @@ export function DealsGrid({ deals }: { deals: DealItem[] }) {
     <div className="space-y-5">
       <div className="flex flex-wrap items-center gap-2" role="group" aria-label="Filter deals">
         {(["AU", "Global", "all"] as const).map((r) => (
-          <button key={r} type="button" aria-pressed={region === r} className={chip(region === r)} onClick={() => setRegion(r)}>
+          <button key={r} type="button" data-filter="region" data-value={r} aria-pressed={region === r} className={chip(region === r)} onClick={() => setRegion(r)}>
             {r === "AU" ? "Australia" : r === "Global" ? "Global" : "All regions"}
           </button>
         ))}
         <span className="mx-1 h-5 w-px bg-line" aria-hidden />
         {retailers.map((r) => (
-          <button key={r} type="button" aria-pressed={retailer === r} className={chip(retailer === r)} onClick={() => setRetailer(retailer === r ? null : r)}>
+          <button key={r} type="button" data-filter="retailer" data-value={r} aria-pressed={retailer === r} className={chip(retailer === r)} onClick={() => setRetailer(retailer === r ? null : r)}>
             {r}
           </button>
         ))}
       </div>
 
       <ul className="grid border-t border-l border-line sm:grid-cols-2 xl:grid-cols-3">
-        {list.map((d) => (
-          <li key={d.slug} id={d.slug} className={`flex scroll-mt-28 flex-col border-r border-b border-line bg-surface p-5 ${d.expired ? "opacity-60" : ""}`}>
+        {deals.map((d) => (
+          <li key={d.slug} id={d.slug} data-region={d.region} data-retailer={d.retailer} hidden={!show(d)} className={`flex scroll-mt-28 flex-col border-r border-b border-line bg-surface p-5 ${d.expired ? "opacity-60" : ""}`}>
             <div className="mb-3 flex items-center justify-between gap-2">
               <RetailerBadge name={d.retailer} />
               {d.expired ? (
@@ -106,7 +107,7 @@ export function DealsGrid({ deals }: { deals: DealItem[] }) {
           </li>
         ))}
       </ul>
-      {list.length === 0 && <p className="py-10 text-center text-sm text-muted">No live deals match those filters.</p>}
+      <p data-empty hidden={list.length > 0} className="py-10 text-center text-sm text-muted">No live deals match those filters.</p>
     </div>
   );
 }

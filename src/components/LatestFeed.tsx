@@ -36,6 +36,7 @@ export function LatestFeed({ items }: { items: FeedItem[] }) {
   const [tab, setTab] = useState<(typeof TABS)[number]["id"]>("all");
   const [limit, setLimit] = useState(10);
   const filtered = useMemo(() => (tab === "all" ? items : items.filter((i) => i.desk === tab)), [items, tab]);
+  const visibleSlugs = useMemo(() => new Set(filtered.slice(0, limit).map((i) => i.slug)), [filtered, limit]);
   const counts = useMemo(
     () => Object.fromEntries(TABS.map((t) => [t.id, t.id === "all" ? items.length : items.filter((i) => i.desk === t.id).length])),
     [items],
@@ -55,6 +56,7 @@ export function LatestFeed({ items }: { items: FeedItem[] }) {
               key={t.id}
               role="tab"
               type="button"
+              data-tab={t.id}
               aria-selected={selected}
               aria-controls="latest-panel"
               onClick={() => { setTab(t.id); setLimit(10); }}
@@ -71,8 +73,9 @@ export function LatestFeed({ items }: { items: FeedItem[] }) {
       </div>
 
       <ol id="latest-panel" role="tabpanel" className="divide-y divide-line">
-        {filtered.slice(0, limit).map((i) => (
-          <li key={i.slug}>
+        {/* All items stay in the HTML (crawlable, works without JS); filters toggle `hidden`. */}
+        {items.map((i) => (
+          <li key={i.slug} data-desk={i.desk} hidden={!visibleSlugs.has(i.slug)}>
             <Link href={i.url} className="group grid grid-cols-[64px_1fr_auto] gap-4 py-4">
               <time dateTime={i.updatedIso} className="pt-0.5 font-mono text-[11px] leading-tight text-muted">{i.updatedLabel}</time>
               <div className="min-w-0 space-y-1.5">
@@ -89,11 +92,12 @@ export function LatestFeed({ items }: { items: FeedItem[] }) {
             </Link>
           </li>
         ))}
-        {filtered.length === 0 && <li className="py-10 text-center text-sm text-muted">Nothing filed on this desk yet.</li>}
+        <li data-empty hidden={filtered.length > 0} className="py-10 text-center text-sm text-muted">Nothing filed on this desk yet.</li>
       </ol>
       {filtered.length > limit && (
         <button
           type="button"
+          data-load-more
           onClick={() => setLimit((l) => l + 10)}
           className="w-full border-y border-fg py-2.5 font-mono text-xs font-bold tracking-wide uppercase hover:bg-elevated"
         >

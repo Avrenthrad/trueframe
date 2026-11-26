@@ -121,8 +121,8 @@ export function Header() {
           </div>
         </div>
 
-        {menuOpen && (
-          <nav id="mobile-nav" aria-label="Desks" className="border-t border-line bg-bg xl:hidden">
+        {(
+          <nav id="mobile-nav" aria-label="Desks" hidden={!menuOpen} className="border-t border-line bg-bg xl:hidden">
             <ul className="up-container grid grid-cols-2 border-l border-line py-0 sm:grid-cols-4">
               {NAV.map((n) => (
                 <li key={n.href} className="border-r border-b border-line">

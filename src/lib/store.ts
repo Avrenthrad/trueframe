@@ -80,10 +80,17 @@ const SEED_FP = (() => {
   return (h >>> 0).toString(36);
 })();
 
-export const getLiveArticles = unstable_cache(fetchLive, ["live-articles-v1", storeMode(), SEED_FP], {
+const cachedFetchLive = unstable_cache(fetchLive, ["live-articles-v1", SEED_FP], {
   tags: [ARTICLES_TAG],
   revalidate: 300,
 });
+
+/**
+ * Supabase mode: the tagged, persistent data cache (instant revalidation on publish).
+ * Memory mode: read straight from memory. The persistent cache outlives the
+ * process, and would keep serving articles that a restart has already wiped.
+ */
+export const getLiveArticles = (): Promise<Article[]> => (supabase() ? cachedFetchLive() : fetchLive());
 
 export async function getLiveArticle(slug: string) {
   return (await getLiveArticles()).find((a) => a.slug === slug) ?? null;
