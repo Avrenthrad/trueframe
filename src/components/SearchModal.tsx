@@ -73,7 +73,7 @@ export function SearchModal({ open, onClose }: { open: boolean; onClose: () => v
       onClose={onClose}
       onClick={(e) => e.target === dialogRef.current && onClose()}
       aria-label="Search"
-      className="m-0 mx-auto mt-[10vh] w-[min(640px,calc(100vw-2rem))] max-w-none rounded-2xl border border-line-strong bg-surface p-0 text-fg shadow-2xl backdrop:bg-black/60 backdrop:backdrop-blur-sm"
+      className="m-0 mx-auto mt-[10vh] w-[min(640px,calc(100vw-2rem))] max-w-none border border-line-strong bg-surface p-0 text-fg backdrop:bg-black/60"
     >
       <div className="flex items-center gap-3 border-b border-line px-4">
         <IconSearch className="size-5 text-muted" />
@@ -100,7 +100,7 @@ export function SearchModal({ open, onClose }: { open: boolean; onClose: () => v
           aria-activedescendant={results[active] ? `sr-${active}` : undefined}
           aria-autocomplete="list"
         />
-        <kbd className="rounded border border-line px-1.5 py-0.5 font-mono text-[10px] text-muted">ESC</kbd>
+        <kbd className="border border-line px-1.5 py-0.5 font-mono text-[10px] text-muted">ESC</kbd>
       </div>
       <ul id="search-results" role="listbox" className="max-h-[55vh] overflow-y-auto p-2">
         {results.length === 0 && <li className="px-3 py-8 text-center text-sm text-muted">{items.length ? "No matches." : "Loading…"}</li>}
@@ -112,7 +112,7 @@ export function SearchModal({ open, onClose }: { open: boolean; onClose: () => v
             aria-selected={i === active}
             onMouseEnter={() => setActive(i)}
             onClick={() => go(r.u)}
-            className={`flex cursor-pointer items-center gap-3 rounded-lg px-3 py-2.5 ${i === active ? "bg-elevated" : ""}`}
+            className={`flex cursor-pointer items-center gap-3 px-3 py-2.5 ${i === active ? "bg-elevated" : ""}`}
           >
             <span className="w-14 shrink-0 font-mono text-[10px] tracking-wide uppercase text-muted">{r.c}</span>
             <span className="min-w-0 flex-1 truncate text-sm font-medium">{r.t}</span>

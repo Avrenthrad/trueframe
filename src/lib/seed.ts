@@ -28,6 +28,7 @@ export const SEED_ARTICLES: Article[] = [
     title: "Ironvale: Rising delayed to 19 March 2027, studio confirms",
     slug: "ironvale-rising-delayed-march-2027",
     category: "news",
+    is_breaking: true,
     status: "published",
     source_tier: "first_party_official",
     primary_source_name: "Ironvale Studios dev blog",
@@ -97,7 +98,7 @@ A five-week slip ahead of a crowded autumn is a sensible move, not a red flag. T
     tags: ["Hardware", "Handheld", "AU pricing"],
     excerpt: "Two retailers confirmed stock and pricing for the 512 GB model. The 1 TB OLED arrives in December.",
     tldr_answer:
-      "The Kestrel Portable 512 GB is $799 in Australia from today. JB Hi-Fi and Amazon AU both confirmed stock to TrueFrame. The 1 TB OLED model ($1,049) ships 11 December.",
+      "The Kestrel Portable 512 GB is $799 in Australia from today. JB Hi-Fi and Amazon AU both confirmed stock to UNPATCHED.GG. The 1 TB OLED model ($1,049) ships 11 December.",
     hype_vs_reality: {
       confirmed_facts: ["512 GB LCD: $799 AUD, in stock 25 Nov", "1 TB OLED: $1,049 AUD, ships 11 Dec", "Runs Windows 11 with a custom launcher"],
       our_expectations: ["Battery life in demanding games closer to 2 hours than the advertised 3–4", "Early stock to sell through before Christmas"],
@@ -198,6 +199,59 @@ See the full list in our [Game Pass & PS Plus tracker](/hubs/game-pass-ps-plus-t
 ## What's leaving on 15 December?
 
 Just **Neon Requiem**. The member discount of 20% applies until it leaves.`,
+  }),
+
+  seed({
+    title: "Starlight Relay season 2 confirmed for April 2027, with a simulcast in Australia",
+    slug: "starlight-relay-season-2-april-2027",
+    category: "news",
+    vertical: "anime",
+    status: "published",
+    source_tier: "first_party_official",
+    primary_source_name: "Studio Kumo official X account + licensor press release",
+    primary_source_url: "https://studio-kumo.example/news/starlight-relay-s2",
+    published_at: "2026-11-26T07:30:00+11:00",
+    updated_at: "2026-11-26T08:15:00+11:00",
+    author: SAM,
+    platforms: ["Crunchyroll"],
+    tags: ["Anime", "Simulcast", "Starlight Relay"],
+    excerpt: "Twelve episodes, same director, and a same-day English sub in AU and NZ.",
+    tldr_answer:
+      "Yes. Starlight Relay season 2 premieres in April 2027 with 12 episodes, and Australian viewers get a same-day subbed simulcast. The English dub follows two weeks later.",
+    spoiler_warning: { enabled: true, label: "Light spoilers for the Starlight Relay season 1 finale" },
+    hype_vs_reality: {
+      confirmed_facts: ["Premieres April 2027 (exact date TBA)", "12 episodes", "Same-day subbed simulcast in AU/NZ", "English dub two weeks behind"],
+      our_expectations: ["A key visual and trailer at the studio's December stream", "Season 1 returning to the service in full before the premiere"],
+    },
+    body_md: `## When does season 2 start?
+
+**April 2027.** The studio has confirmed the month but not the day yet.
+
+## Can I watch it in Australia?
+
+Yes. The licensor's release says AU and NZ get the subbed episodes the same day as Japan.
+
+## Is the original team back?
+
+The director and series composer both return, per the studio's announcement.`,
+  }),
+  seed({
+    title: "Moonlit Arcana anime adaptation reportedly in production",
+    slug: "rumour-moonlit-arcana-anime-adaptation",
+    category: "news",
+    vertical: "anime",
+    status: "published",
+    source_tier: "unconfirmed_rumor",
+    primary_source_name: "Japanese trade magazine listing (unverified)",
+    primary_source_url: "https://trade-mag.example/listing/moonlit-arcana",
+    published_at: "2026-11-25T20:00:00+11:00",
+    updated_at: "2026-11-25T20:00:00+11:00",
+    author: PRIYA,
+    tags: ["Anime", "Rumour"],
+    tldr_answer: "Unconfirmed. A trade-magazine listing names an adaptation, but the publisher and the rumoured studio haven't announced anything.",
+    body_md: `## How solid is this?
+
+It's a single trade listing with no studio or date attached. We'll upgrade the tier as soon as there's an official post.`,
   }),
 
   /* ── REVIEWS ──────────────────────────────────────────────────────────── */
@@ -380,6 +434,39 @@ A recap episode is built in, but the season 1 finale is worth revisiting.`,
     },
   }),
 
+  seed({
+    title: "Starlight Relay season 1 review: the sports anime of the year",
+    slug: "starlight-relay-season-1-review",
+    category: "review",
+    vertical: "anime",
+    status: "published",
+    source_tier: "first_party_official",
+    primary_source_name: "Studio Kumo series page",
+    primary_source_url: "https://studio-kumo.example/starlight-relay",
+    published_at: "2026-10-12T18:00:00+11:00",
+    updated_at: "2026-10-12T18:00:00+11:00",
+    author: SAM,
+    platforms: ["Crunchyroll"],
+    tags: ["Anime", "Sports"],
+    tldr_answer: "Watch it. Starlight Relay's twelve episodes have the best race animation of the season and a cast you'll actually miss.",
+    review_meta: {
+      score_100: 88,
+      verdict_label: "Buy",
+      verdict_sentence: "Every race is animated like a finale, and the quiet episodes land just as hard.",
+      the_good: ["Stunning race sequences", "Grounded, likeable team", "Great opening theme"],
+      the_bad: ["Episode 7 is a recap in disguise", "Rival team underwritten"],
+      platform_tested: "Crunchyroll (1080p, sub)",
+      hours_played: 5,
+      human_approved: true,
+      item_name: "Starlight Relay: Season 1",
+      critic_avg: 85,
+      community_avg: 91,
+    },
+    body_md: `## Do I need to like sports anime?
+
+No. The races are the spectacle, but the show is about the team.`,
+  }),
+
   /* ── GUIDES ───────────────────────────────────────────────────────────── */
   seed({
     title: "Ironvale: Echoes — all 12 Relic locations (and the order to get them)",
@@ -498,7 +585,7 @@ On handhelds, 40fps at 80Hz feels closer to 60 than to 30, and it uses about a t
     status: "published",
     source_tier: "first_party_official",
     primary_source_name: "Publisher & platform release announcements",
-    primary_source_url: "https://trueframe.example/methodology/release-dates",
+    primary_source_url: "https://unpatched.example/methodology/release-dates",
     published_at: "2026-11-01T09:00:00+11:00",
     updated_at: "2026-11-26T09:00:00+11:00",
     author: PRIYA,
@@ -524,8 +611,8 @@ On handhelds, 40fps at 80Hz feels closer to 60 than to 30, and it uses about a t
     category: "hub",
     status: "published",
     source_tier: "first_party_official",
-    primary_source_name: "TrueFrame review scores",
-    primary_source_url: "https://trueframe.example/methodology/scoring",
+    primary_source_name: "UNPATCHED.GG review scores",
+    primary_source_url: "https://unpatched.example/methodology/scoring",
     published_at: "2026-11-01T09:00:00+11:00",
     updated_at: "2026-11-22T11:00:00+11:00",
     author: MIA,
@@ -549,12 +636,12 @@ On handhelds, 40fps at 80Hz feels closer to 60 than to 30, and it uses about a t
     category: "hub",
     status: "published",
     source_tier: "first_party_official",
-    primary_source_name: "TrueFrame review scores",
-    primary_source_url: "https://trueframe.example/methodology/scoring",
+    primary_source_name: "UNPATCHED.GG review scores",
+    primary_source_url: "https://unpatched.example/methodology/scoring",
     published_at: "2026-10-01T09:00:00+11:00",
     updated_at: "2026-11-22T11:00:00+11:00",
     author: MIA,
-    tldr_answer: "Filter every TrueFrame-scored game by platform and minimum score. Scores come only from our own hands-on reviews.",
+    tldr_answer: "Filter every UNPATCHED.GG-scored game by platform and minimum score. Scores come only from our own hands-on reviews.",
     hub_meta: {
       hub_type: "game_index",
       entries: [
@@ -603,12 +690,12 @@ On handhelds, 40fps at 80Hz feels closer to 60 than to 30, and it uses about a t
     vertical: "film_tv",
     status: "published",
     source_tier: "first_party_official",
-    primary_source_name: "TrueFrame review scores",
-    primary_source_url: "https://trueframe.example/methodology/scoring",
+    primary_source_name: "UNPATCHED.GG review scores",
+    primary_source_url: "https://unpatched.example/methodology/scoring",
     published_at: "2026-10-01T09:00:00+11:00",
     updated_at: "2026-10-30T18:00:00+11:00",
     author: SAM,
-    tldr_answer: "Every series TrueFrame has reviewed, with the streamer and our score.",
+    tldr_answer: "Every series UNPATCHED.GG has reviewed, with the streamer and our score.",
     hub_meta: {
       hub_type: "show_index",
       entries: [

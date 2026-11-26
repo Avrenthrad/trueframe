@@ -31,7 +31,7 @@ export default async function HubPage({ params }: Props) {
   if (!a) notFound();
   const { html } = renderMarkdown(a.body_md);
   return (
-    <div className="tf-container max-w-[1040px] space-y-8 pt-6 pb-10 sm:pt-10">
+    <div className="up-container max-w-[1040px] space-y-8 pt-6 pb-10 sm:pt-10">
       <JsonLd data={articleLdBundle(a)} />
       <ArticleHeader a={a} />
       <ShortAnswer text={a.tldr_answer} />

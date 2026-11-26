@@ -1,6 +1,6 @@
-# TrueFrame
+# UNPATCHED.GG
 
-**First-Party Truth. Real Hype.** Gaming & entertainment news, reviews, guides, hubs and AU deals.
+**unpatched.gg · First-Party Truth. Real Hype.** Games, movies & TV and anime news, plus reviews, guides, trackers and AU deals, built like a broadsheet: flat editorial ink and 1px hairline grids, with no glow or gradients.
 
 Next.js 16 (App Router) · TypeScript · Tailwind CSS v4 · Supabase (Postgres + Storage) · Vercel. Every tier used here has a free plan.
 
@@ -28,13 +28,13 @@ Without Supabase env vars the site runs on **built-in demo seed data** and the A
 
 ```
 src/
-  app/                      routes: /, /news/[slug], /reviews/[slug], /guides/[slug], /hubs/[slug], /deals, /videos
+  app/                      routes: /, /desks/{games,movies-tv,anime}, /news/[slug], /reviews/[slug], /guides/[slug], /hubs/[slug], /deals, /videos
     api/publish/            POST create · [slug]: GET / PATCH / DELETE   (Bearer PUBLISH_API_KEY)
     api/intake/             POST external submissions                   (HMAC or X-Intake-Secret)
     api/cron/publish-scheduled  promotes due scheduled posts            (Bearer CRON_SECRET)
     api/og/                 dynamic 1200×630 OpenGraph cards
     feed.xml · sitemap.xml · news-sitemap.xml · robots.txt
-  components/               TrueFrameLogo, Header/Search, VerdictCard, HypeVsReality, HubView, Deals …
+  components/               UnpatchedLogo, Header/Search, LiveWire, VerdictCard, HypeVsReality, HubView, Deals …
   lib/schema.ts             ★ Zod schema + editorial rules (source of truth for content)
   lib/publishing.ts         shared publish pipeline (sanitise → gate → mirror image → save → revalidate)
   lib/store.ts              Supabase data access + in-memory fallback, cached with tag "articles"
@@ -44,21 +44,30 @@ supabase/migrations/001_init.sql
 
 ## Design system
 
+Flat editorial ink: no glow, no gradients, no drop shadows, no rounded "SaaS cards". Structure comes from **1px hairline dividers** and **3px ink rules** on section mastheads.
+
 | Token | Dark (default) | Light |
 | --- | --- | --- |
-| Base / Surface / Elevated | `#0B0D12` / `#131722` / `#1A2030` | `#F8FAFC` / `#FFFFFF` / `#F1F5F9` |
-| Border | `#222838` | `#E2E8F0` |
-| Text / Muted | `#F4F6F8` / `#94A3B8` | `#0F172A` / `#475569` |
-| Signal Mint (accent, First-Party Official) | `#00E599` | `#00B87A` fill · `#047857` small text |
-| Sky Cyan (Verified Report) | `#38BDF8` | `#0369A1` text |
-| Editorial Amber (Rumor, Spoilers) | `#F59E0B` | `#B45309` text |
-| Signal Coral (Skip / negative) | `#FF4D5E` | `#BE123C` text |
+| Background | `#0B0A10` Obsidian | `#F6F3EE` Editorial Paper |
+| Surface / Elevated | `#14121C` / `#1C1927` | `#FFFFFF` / `#EFEBE4` |
+| Hairline border | `#262235` | `#DCD7CE` |
+| Text / Muted | `#F6F3EE` / `#A39DB0` | `#0B0A10` / `#575163` |
+| **Vice Pink**: accent, BREAKING, `.GG`, active nav | `#FF2E93` | fill `#FF2E93` · small text `#C2185B` |
+| **Vice Gold**: verdicts, scores, editorial rules (Short Answer, spoilers) | `#F5B700` | fill `#F5B700` · small text `#8A6100` |
+| **Vice Purple**: desk tags, interactive filters | `#7C3AED` fill · `#A78BFA` text | `#7C3AED` |
+| **Verified Green**: *only* the Primary Source · Official badge | `#15803D` (white text) | `#15803D` (white text) |
 
-Fonts: Space Grotesk (headlines), Inter (body), JetBrains Mono (scores, timestamps, pills). They're self-hosted via `@fontsource-variable`, so there are no Google Fonts requests.
+- **Desks:** every story carries a purple desk label (Games Desk, Movies & TV, Anime, Reviews, Guides, AU Deals, Trackers) derived from `category` + `vertical`.
+- **Live Wire:** a timestamped rail of editorial filings on the homepage.
+- **Image credits:** every image renders an `Image: [Studio / Official Press]` line from `hero_image_credit` (or `gallery[].credit`). The publish API warns when a credit is missing. Without an image, a flat placeholder shows an open credit slot. There's no stock art and no generated gradients.
+- **Fonts:** Space Grotesk (headlines), Inter (body), JetBrains Mono (scores, timestamps, tags). They're self-hosted via `@fontsource-variable`.
+- **Contrast:** pink, gold and purple fall below 4.5:1 as small text on some backgrounds, so each has a separate `*-text` token, all ≥ 4.5:1 (WCAG AA). Fills that sit behind text use ink or white, whichever passes. Tokens live in `src/app/globals.css`.
 
-**Contrast note:** the brand colours `#00B87A`, `#38BDF8`, `#F59E0B` and `#FF4D5E` drop below WCAG AA (4.5:1) as small text on light backgrounds. Light mode keeps them for fills, rings and borders, and uses the darker `*-text` tokens above for text. All tokens live in `src/app/globals.css`.
-
-Logo: `<TrueFrameLogo />` / `<TrueFrameMark />` in `src/components/TrueFrameLogo.tsx`. There's also a favicon at `src/app/icon.svg` and a static wordmark at `public/brand/trueframe-logo.svg`.
+### Logo
+`src/components/UnpatchedLogo.tsx` is pure SVG geometry with no font dependency, so it renders the same in the nav, favicon and OG cards.
+- **Wordmark:** heavy condensed block `UNPATCHED` with a diagonal slash cut through the left stem of the U, `.GG` in Vice Pink, underscored by a thin Vice Gold bar.
+- **Mark / favicon:** a square split diagonally, Pink top-left and Purple bottom-right, with a Gold folded top-right corner and a bold white sliced U.
+- **Files:** `src/app/icon.svg` (favicon), `public/brand/unpatched-logo.svg` (wordmark, for dark backgrounds), `public/brand/unpatched-mark.svg`.
 
 ## Deploy (Supabase + Vercel)
 
@@ -74,7 +83,7 @@ Logo: `<TrueFrameLogo />` / `<TrueFrameMark />` in `src/components/TrueFrameLogo
 
 | Variable | Value |
 | --- | --- |
-| `NEXT_PUBLIC_SITE_URL` | `https://your-domain.com.au` (no trailing slash) |
+| `NEXT_PUBLIC_SITE_URL` | `https://unpatched.gg` (no trailing slash) |
 | `SUPABASE_URL` | Supabase Project URL |
 | `SUPABASE_SERVICE_ROLE_KEY` | service_role key (**server-only, never `NEXT_PUBLIC_`**) |
 | `SUPABASE_STORAGE_BUCKET` | `hero-images` |
@@ -83,9 +92,9 @@ Logo: `<TrueFrameLogo />` / `<TrueFrameMark />` in `src/components/TrueFrameLogo
 | `INTAKE_TRUSTED_SOURCES` | e.g. `partner-bot,senior-contributor` |
 | `CRON_SECRET` | `openssl rand -hex 32` (Vercel Cron sends it automatically) |
 
-3. Deploy. Then check with `curl https://your-domain/api/publish -X POST` → expect `401`.
+3. Deploy. Then check with `curl https://unpatched.gg/api/publish -X POST` → expect `401`.
 
-> In production, the write APIs return **503** until Supabase is configured. That stops a bot from "publishing" into the per-instance memory store and losing the article. (`TRUEFRAME_ALLOW_MEMORY_WRITES=1` overrides this; use it only for local testing.)
+> In production, the write APIs return **503** until Supabase is configured. That stops a bot from "publishing" into the per-instance memory store and losing the article. (`UNPATCHED_ALLOW_MEMORY_WRITES=1` overrides this; use it only for local testing.)
 
 ### Scheduling on the free tier
 `vercel.json` runs `/api/cron/publish-scheduled` daily, which is the most Vercel Hobby allows. Scheduled posts **don't depend on the cron to go live**: the public query includes `scheduled` rows whose `published_at` has passed, and pages revalidate every 5 minutes. So a scheduled article appears within about 5 minutes of its time. For exact-minute publishing, point any free external scheduler (GitHub Actions, cron-job.org) at the cron URL every 5 minutes with `Authorization: Bearer $CRON_SECRET`, or upgrade to Vercel Pro and change the schedule to `*/5 * * * *`.

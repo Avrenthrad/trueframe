@@ -45,7 +45,7 @@ export default async function ReviewPage({ params }: Props) {
       a={a}
       toc={fullToc}
       rail={
-        <div className="tf-card flex items-center gap-3 p-3">
+        <div className="up-card flex items-center gap-3 p-3">
           <ScoreChip score={r.score_100} />
           <div className="min-w-0">
             <p className="truncate text-sm font-semibold">{r.item_name ?? a.title}</p>

@@ -15,8 +15,8 @@ function Chip({ on, onClick, children }: { on: boolean; onClick: () => void; chi
       type="button"
       aria-pressed={on}
       onClick={onClick}
-      className={`rounded-full border px-3 py-1 text-[13px] font-medium transition-colors ${
-        on ? "border-mint bg-mint text-on-mint" : "border-line bg-surface text-muted hover:border-line-strong hover:text-fg"
+      className={` border px-3 py-1 text-[13px] font-medium transition-colors ${
+        on ? "border-purple bg-purple text-on-purple" : "border-line bg-surface text-muted hover:border-line-strong hover:text-fg"
       }`}
     >
       {children}
@@ -26,7 +26,7 @@ function Chip({ on, onClick, children }: { on: boolean; onClick: () => void; chi
 
 function Title({ e }: { e: HubEntry }) {
   return e.href ? (
-    <Link href={e.href} className="font-semibold hover:text-mint-text hover:underline">{e.title}</Link>
+    <Link href={e.href} className="font-semibold hover:text-accent-text hover:underline">{e.title}</Link>
   ) : (
     <span className="font-semibold">{e.title}</span>
   );
@@ -50,16 +50,16 @@ export function HubView({ meta }: { meta: HubMeta }) {
   return (
     <div className="space-y-5">
       {/* Filters */}
-      <div className="tf-card flex flex-col gap-4 p-4" role="group" aria-label="Filters">
+      <div className="up-card flex flex-col gap-4 p-4" role="group" aria-label="Filters">
         {meta.hub_type === "subscriptions" && (
           <div className="flex flex-wrap items-center gap-2">
-            <span className="tf-eyebrow w-20">Service</span>
+            <span className="up-eyebrow w-20">Service</span>
             <Chip on={service === "game_pass"} onClick={() => setService("game_pass")}>Game Pass</Chip>
             <Chip on={service === "ps_plus"} onClick={() => setService("ps_plus")}>PS Plus</Chip>
           </div>
         )}
         <div className="flex flex-wrap items-center gap-2">
-          <span className="tf-eyebrow w-20">Platform</span>
+          <span className="up-eyebrow w-20">Platform</span>
           <Chip on={platform === null} onClick={() => setPlatform(null)}>All</Chip>
           {platforms.map((p) => (
             <Chip key={p} on={platform === p} onClick={() => setPlatform(platform === p ? null : p)}>{p}</Chip>
@@ -67,7 +67,7 @@ export function HubView({ meta }: { meta: HubMeta }) {
         </div>
         {scored && (
           <div className="flex flex-wrap items-center gap-2">
-            <span className="tf-eyebrow w-20">Min score</span>
+            <span className="up-eyebrow w-20">Min score</span>
             {[0, 60, 75, 85].map((s) => (
               <Chip key={s} on={minScore === s} onClick={() => setMinScore(s)}>{s === 0 ? "Any" : `${s}+`}</Chip>
             ))}
@@ -78,7 +78,7 @@ export function HubView({ meta }: { meta: HubMeta }) {
       <p className="font-mono text-xs text-muted" aria-live="polite">{rows.length} {rows.length === 1 ? "entry" : "entries"}</p>
 
       {scored && (
-        <div className="tf-card overflow-x-auto">
+        <div className="up-card overflow-x-auto">
           <table className="w-full min-w-[520px] text-sm">
             <thead>
               <tr className="border-b border-line text-left font-mono text-[11px] tracking-wider text-muted uppercase">
@@ -116,10 +116,10 @@ export function HubView({ meta }: { meta: HubMeta }) {
           ).map(([month, list]) => (
             <section key={month} aria-label={month}>
               <h2 className="mb-2 text-lg font-bold">{month}</h2>
-              <ol className="tf-card divide-y divide-line">
+              <ol className="up-card divide-y divide-line">
                 {list.map((e) => (
                   <li key={e.title} className="grid grid-cols-[96px_1fr] items-center gap-3 px-4 py-3 sm:grid-cols-[120px_1fr_auto]">
-                    <time dateTime={e.release_date} className="font-mono text-xs text-mint-text">{e.release_date ? fmtDay(e.release_date) : "TBC"}</time>
+                    <time dateTime={e.release_date} className="font-mono text-xs text-accent-text">{e.release_date ? fmtDay(e.release_date) : "TBC"}</time>
                     <div className="min-w-0">
                       <Title e={e} />
                       {e.studio && <span className="block text-xs text-muted">{e.studio}</span>}
@@ -138,8 +138,8 @@ export function HubView({ meta }: { meta: HubMeta }) {
           {(["joining", "leaving"] as const).map((change) => {
             const list = rows.filter((e) => e.change === change);
             return (
-              <section key={change} aria-label={change} className="tf-card overflow-hidden">
-                <h2 className={`border-b border-line px-4 py-3 font-mono text-xs font-semibold tracking-wider uppercase ${change === "joining" ? "text-mint-text" : "text-coral-text"}`}>
+              <section key={change} aria-label={change} className="up-card overflow-hidden">
+                <h2 className={`border-b border-line px-4 py-3 font-mono text-xs font-semibold tracking-wider uppercase ${change === "joining" ? "text-accent-text" : "text-accent-text"}`}>
                   {change === "joining" ? "▲ Joining" : "▼ Leaving"} <span className="text-muted">({list.length})</span>
                 </h2>
                 <table className="w-full text-sm">

@@ -1,4 +1,4 @@
--- TrueFrame: initial schema
+-- unpatched.gg: initial schema
 -- Run with: supabase db push   (or paste into Supabase Dashboard → SQL Editor)
 -- Column names mirror src/lib/schema.ts exactly, so rows map 1:1 to the Zod type.
 
@@ -24,7 +24,7 @@ create table if not exists public.articles (
   title               text not null check (char_length(title) between 1 and 180),
   tldr_answer         text not null,
   category            article_category not null,
-  vertical            text not null default 'games' check (vertical in ('games', 'film_tv')),
+  vertical            text not null default 'games' check (vertical in ('games', 'film_tv', 'anime')),
   source_tier         source_tier not null,
   primary_source_name text not null,
   primary_source_url  text not null check (primary_source_url like 'https://%'),
@@ -39,6 +39,8 @@ create table if not exists public.articles (
   body_md             text not null default '',
   hero_image_url      text,
   hero_image_alt      text,
+  hero_image_credit   text,                           -- "Studio / Official Press"
+  is_breaking         boolean not null default false,
   tags                text[] not null default '{}',
   platforms           text[] not null default '{}',
 
@@ -63,6 +65,10 @@ create table if not exists public.articles (
   -- A scored review can never be live without human sign-off.
   constraint review_human_gate check (
     category <> 'review' or status = 'draft' or coalesce((review_meta ->> 'human_approved')::boolean, false)
+  ),
+  -- BREAKING is for confirmed news only.
+  constraint breaking_is_confirmed_news check (
+    not is_breaking or (category = 'news' and source_tier <> 'unconfirmed_rumor')
   ),
   -- No fake discounts.
   constraint deal_is_discount check (

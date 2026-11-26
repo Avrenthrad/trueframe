@@ -44,9 +44,9 @@ export default async function GuidePage({ params }: Props) {
       {a.spoiler_warning?.enabled && <SpoilerBanner label={a.spoiler_warning.label} />}
       {(g?.estimated_time || g?.difficulty) && (
         <dl className="flex flex-wrap gap-3 font-mono text-xs">
-          {g.estimated_time && <div className="tf-card flex gap-2 px-3 py-2"><dt className="text-muted">Time</dt><dd className="font-semibold">{g.estimated_time}</dd></div>}
-          {g.difficulty && <div className="tf-card flex gap-2 px-3 py-2"><dt className="text-muted">Difficulty</dt><dd className="font-semibold">{g.difficulty}</dd></div>}
-          {steps.length > 0 && <div className="tf-card flex gap-2 px-3 py-2"><dt className="text-muted">Steps</dt><dd className="font-semibold">{steps.length}</dd></div>}
+          {g.estimated_time && <div className="up-card flex gap-2 px-3 py-2"><dt className="text-muted">Time</dt><dd className="font-semibold">{g.estimated_time}</dd></div>}
+          {g.difficulty && <div className="up-card flex gap-2 px-3 py-2"><dt className="text-muted">Difficulty</dt><dd className="font-semibold">{g.difficulty}</dd></div>}
+          {steps.length > 0 && <div className="up-card flex gap-2 px-3 py-2"><dt className="text-muted">Steps</dt><dd className="font-semibold">{steps.length}</dd></div>}
         </dl>
       )}
 
@@ -55,8 +55,8 @@ export default async function GuidePage({ params }: Props) {
           <h2 id="steps-h" className="text-2xl font-bold">Step-by-step</h2>
           <ol className="space-y-3">
             {steps.map((s, i) => (
-              <li key={s.title} id={`step-${i + 1}`} className="tf-card flex gap-4 p-4 sm:p-5">
-                <span className="grid size-9 shrink-0 place-items-center rounded-lg bg-mint font-mono text-sm font-bold text-on-mint" aria-hidden>
+              <li key={s.title} id={`step-${i + 1}`} className="up-card flex gap-4 p-4 sm:p-5">
+                <span className="grid size-9 shrink-0 place-items-center bg-accent font-mono text-sm font-bold text-on-accent" aria-hidden>
                   {String(i + 1).padStart(2, "0")}
                 </span>
                 <div className="min-w-0 flex-1">
@@ -64,12 +64,12 @@ export default async function GuidePage({ params }: Props) {
                     <span className="sr-only">Step {i + 1}: </span>{s.title}
                   </h3>
                   {s.spoiler ? (
-                    <details className="tf-spoiler mt-2">
-                      <summary className="tf-spoiler-summary">Spoiler: tap to reveal</summary>
-                      <div className="tf-prose text-[15px]" dangerouslySetInnerHTML={{ __html: s.html }} />
+                    <details className="up-spoiler mt-2">
+                      <summary className="up-spoiler-summary">Spoiler: tap to reveal</summary>
+                      <div className="up-prose text-[15px]" dangerouslySetInnerHTML={{ __html: s.html }} />
                     </details>
                   ) : (
-                    <div className="tf-prose text-[15px] text-muted" dangerouslySetInnerHTML={{ __html: s.html }} />
+                    <div className="up-prose text-[15px] text-muted" dangerouslySetInnerHTML={{ __html: s.html }} />
                   )}
                 </div>
               </li>

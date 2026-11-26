@@ -14,7 +14,7 @@ const publisher = () => ({
   "@id": `${SITE.url}#org`,
   name: SITE.name,
   url: SITE.url,
-  logo: { "@type": "ImageObject", url: absoluteUrl("/brand/trueframe-logo.svg") },
+  logo: { "@type": "ImageObject", url: absoluteUrl("/brand/unpatched-mark.svg") },
 });
 
 export const organizationLd = (): LD => ({ "@context": "https://schema.org", ...publisher(), slogan: SITE.tagline });

@@ -1,13 +1,13 @@
 import Image from "next/image";
-import type { Category, SourceTier, Verdict } from "@/lib/schema";
-import { CATEGORY_LABEL } from "@/lib/site";
+import type { Article, SourceTier, Verdict } from "@/lib/schema";
+import { DESK_LABEL, deskOf } from "@/lib/site";
 
-/* ── Icons (inline, 1.5px stroke, currentColor) ──────────────────────────── */
+/* ── Icons (inline, 2px stroke, currentColor) ────────────────────────────── */
 type IconProps = { className?: string };
 const I = (d: string) =>
   function Icon({ className = "size-3.5" }: IconProps) {
     return (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="square" strokeLinejoin="miter" className={className} aria-hidden>
         <path d={d} />
       </svg>
     );
@@ -31,55 +31,57 @@ export const IconArrowRight = I("M5 12h14M13 6l6 6-6 6");
 export const IconCalendar = I("M4 6h16v14H4z M4 10h16 M8 3v4 M16 3v4");
 export const IconBolt = I("M13 3L4 14h7l-1 7 9-11h-7z");
 
-/* ── Source tier ─────────────────────────────────────────────────────────── */
-export const TIER = {
-  first_party_official: { label: "First-Party Official", short: "Official", cls: "text-mint-text bg-mint/10 border-mint/35", Icon: IconCheckBadge },
-  verified_report: { label: "Verified Report", short: "Verified", cls: "text-sky-text bg-sky/10 border-sky/35", Icon: IconShield },
-  unconfirmed_rumor: { label: "Unconfirmed Rumor", short: "Rumor", cls: "text-amber-text bg-amber/10 border-amber/40", Icon: IconAlert },
-} as const satisfies Record<SourceTier, unknown>;
+const tag = "inline-flex items-center gap-1.5 font-mono font-bold tracking-[0.08em] uppercase whitespace-nowrap";
 
-const pillBase = "inline-flex items-center gap-1.5 rounded-md border font-mono font-medium tracking-wide uppercase whitespace-nowrap";
+/* ── Source tier ─────────────────────────────────────────────────────────────
+ * Verified Green is reserved for the First-Party Official badge (solid fill,
+ * white text: 5:1). The other tiers are outline tags so the green stays rare. */
+export const TIER = {
+  first_party_official: { label: "Primary Source · Official", short: "Official", cls: "bg-verified text-on-verified border-verified", Icon: IconCheckBadge },
+  verified_report: { label: "Verified Report", short: "Verified", cls: "border-purple text-purple-text", Icon: IconShield },
+  unconfirmed_rumor: { label: "Unconfirmed Rumor", short: "Rumor", cls: "border-gold text-gold-text", Icon: IconAlert },
+} as const satisfies Record<SourceTier, unknown>;
 
 export function SourceTierPill({ tier, compact = false }: { tier: SourceTier; compact?: boolean }) {
   const t = TIER[tier];
   return (
-    <span className={`${pillBase} ${t.cls} ${compact ? "px-1.5 py-0.5 text-[10px]" : "px-2 py-1 text-[11px]"}`} title={t.label}>
-      <t.Icon className={compact ? "size-3" : "size-3.5"} />
+    <span className={`${tag} border ${t.cls} ${compact ? "px-1 py-px text-[9.5px]" : "px-1.5 py-0.5 text-[10.5px]"}`} title={t.label}>
+      <t.Icon className={compact ? "size-2.5" : "size-3"} />
       {compact ? t.short : t.label}
     </span>
   );
 }
 
-export function CategoryPill({ category, vertical }: { category: Category; vertical?: string }) {
-  const label = vertical === "film_tv" && category === "news" ? "Film & TV" : CATEGORY_LABEL[category];
-  return <span className={`${pillBase} border-line-strong bg-elevated px-1.5 py-0.5 text-[10px] text-fg`}>{label}</span>;
+/** Purple desk label: Games Desk, Movies & TV, Anime, Reviews, AU Deals… */
+export function DeskTag({ a }: { a: Pick<Article, "category" | "vertical" | "deal_meta"> }) {
+  return <span className="up-desk">{DESK_LABEL[deskOf(a)]}</span>;
+}
+
+/** Pink BREAKING tag. Only shown when an editor sets is_breaking. */
+export function BreakingTag() {
+  return <span className={`${tag} bg-accent px-1.5 py-px text-[10px] text-on-accent`}>Breaking</span>;
 }
 
 export function PlatformTag({ children }: { children: React.ReactNode }) {
-  return <span className="inline-flex items-center rounded border border-line px-1.5 py-0.5 font-mono text-[10.5px] text-muted">{children}</span>;
+  return <span className="inline-flex items-center border border-line px-1.5 py-px font-mono text-[10.5px] text-muted">{children}</span>;
 }
 
+/* ── Verdicts & scores: Vice Gold ──────────────────────────────────────────── */
 export const VERDICT_STYLE: Record<Verdict, string> = {
-  Buy: "bg-mint text-on-mint border-mint",
-  Wait: "bg-amber text-[#1a1203] border-amber",
-  Skip: "bg-coral text-white border-coral",
+  Buy: "bg-gold text-on-gold border-gold",
+  Wait: "border-gold text-gold-text",
+  Skip: "border-fg text-fg line-through decoration-2",
 };
 
 export function VerdictPill({ verdict, size = "md" }: { verdict: Verdict; size?: "sm" | "md" | "lg" }) {
-  const s = size === "lg" ? "px-3 py-1.5 text-sm" : size === "sm" ? "px-1.5 py-0.5 text-[10px]" : "px-2 py-1 text-xs";
-  return <span className={`${pillBase} font-bold ${VERDICT_STYLE[verdict]} ${s}`}>{verdict}</span>;
-}
-
-/** Score colour band: 75+ mint, 50–74 amber, <50 coral. */
-export function scoreColor(score: number) {
-  return score >= 75 ? "var(--tf-mint)" : score >= 50 ? "var(--tf-amber)" : "var(--tf-coral)";
+  const s = size === "lg" ? "px-2.5 py-1 text-sm" : size === "sm" ? "px-1 py-px text-[9.5px]" : "px-1.5 py-0.5 text-xs";
+  return <span className={`${tag} border ${VERDICT_STYLE[verdict]} ${s}`}>{verdict}</span>;
 }
 
 export function ScoreChip({ score }: { score: number }) {
   return (
     <span
-      className="inline-grid size-9 shrink-0 place-items-center rounded-lg font-mono text-sm font-bold"
-      style={{ background: `color-mix(in srgb, ${scoreColor(score)} 16%, transparent)`, color: "var(--tf-text)", boxShadow: `inset 0 0 0 1.5px ${scoreColor(score)}` }}
+      className="inline-grid h-8 w-10 shrink-0 place-items-center border-2 border-gold bg-surface font-mono text-sm font-bold text-fg"
       aria-label={`Score ${score} out of 100`}
     >
       {score}
@@ -87,18 +89,13 @@ export function ScoreChip({ score }: { score: number }) {
   );
 }
 
-/* ── Cover art ───────────────────────────────────────────────────────────────
- * When an article has no hero image we render deterministic, on-brand
- * generative art instead of a grey box or a stock photo. Zero network cost. */
-function hash(s: string) {
-  let h = 2166136261;
-  for (let i = 0; i < s.length; i++) h = Math.imul(h ^ s.charCodeAt(i), 16777619);
-  return h >>> 0;
-}
-const ART_HUES: Record<SourceTier, [string, string]> = {
-  first_party_official: ["#00E599", "#0B6B52"],
-  verified_report: ["#38BDF8", "#164E73"],
-  unconfirmed_rumor: ["#F59E0B", "#7A4A06"],
+/* ── Images ──────────────────────────────────────────────────────────────────
+ * Real images render with an explicit credit line. With no image we show a
+ * flat, honest placeholder (no gradients, no stock art) and an open credit slot. */
+const SLOT_TINT: Record<SourceTier, string> = {
+  first_party_official: "var(--up-accent)",
+  verified_report: "var(--up-purple)",
+  unconfirmed_rumor: "var(--up-gold)",
 };
 
 export function CoverArt({
@@ -125,38 +122,38 @@ export function CoverArt({
       </div>
     );
   }
-  const h = hash(seed);
-  const [c1, c2] = ART_HUES[tier];
-  const x = 20 + (h % 60);
-  const y = 15 + ((h >> 8) % 70);
-  const r = 18 + ((h >> 16) % 22);
-  const rot = (h >> 4) % 360;
-  const id = `g${h.toString(36)}`;
+  // Deterministic flat composition: ink field + one hard-edged brand slash.
+  let h = 0;
+  for (const c of seed) h = (Math.imul(31, h) + c.charCodeAt(0)) | 0;
+  const off = 30 + (Math.abs(h) % 60);
   return (
-    <div className={`relative overflow-hidden bg-[#0B0D12] ${className}`} role={alt ? "img" : undefined} aria-label={alt || undefined}>
-      <svg viewBox="0 0 160 90" preserveAspectRatio="xMidYMid slice" className="absolute inset-0 size-full" aria-hidden>
-        <defs>
-          <radialGradient id={`${id}a`} cx={`${x}%`} cy={`${y}%`} r="75%">
-            <stop offset="0" stopColor={c1} stopOpacity="0.55" />
-            <stop offset="0.45" stopColor={c2} stopOpacity="0.35" />
-            <stop offset="1" stopColor="#0B0D12" stopOpacity="0" />
-          </radialGradient>
-          <pattern id={`${id}p`} width="8" height="8" patternUnits="userSpaceOnUse" patternTransform={`rotate(${rot % 90})`}>
-            <path d="M0 0H8" stroke="#ffffff" strokeOpacity="0.05" strokeWidth="0.5" />
-          </pattern>
-        </defs>
-        <rect width="160" height="90" fill="#0E1119" />
-        <rect width="160" height="90" fill={`url(#${id}a)`} />
-        <rect width="160" height="90" fill={`url(#${id}p)`} />
-        <g transform={`translate(${(x / 100) * 160} ${(y / 100) * 90}) rotate(${rot})`} opacity="0.5">
-          <rect x={-r} y={-r} width={r * 2} height={r * 2} fill="none" stroke={c1} strokeOpacity="0.5" strokeWidth="0.6" />
-          <rect x={-r * 0.6} y={-r * 0.6} width={r * 1.2} height={r * 1.2} fill="none" stroke={c1} strokeOpacity="0.35" strokeWidth="0.4" />
-        </g>
-        {/* Viewfinder corners echo the logo */}
-        <g stroke="#ffffff" strokeOpacity="0.22" strokeWidth="1" fill="none">
-          <path d="M8 16V8h8M144 8h8v8M152 74v8h-8M16 82H8v-8" />
-        </g>
+    <div className={`relative overflow-hidden border border-line bg-elevated ${className}`} role={alt ? "img" : undefined} aria-label={alt || undefined}>
+      <svg viewBox="0 0 160 90" preserveAspectRatio="none" className="absolute inset-0 size-full" aria-hidden>
+        <path d={`M${off} 90L${off + 26} 0H${off + 34}L${off + 8} 90Z`} fill={SLOT_TINT[tier]} />
+        <path d="M0 89.5H160" stroke="var(--up-border-strong)" strokeWidth="1" vectorEffect="non-scaling-stroke" />
       </svg>
     </div>
+  );
+}
+
+/** Figure wrapper with the mandatory `Image: [Studio / Official Press]` credit slot. */
+export function CreditedImage({ a, className = "", priority = false, sizes }: { a: Article; className?: string; priority?: boolean; sizes?: string }) {
+  return (
+    <figure>
+      <CoverArt seed={a.slug} tier={a.source_tier} src={a.hero_image_url} alt={a.hero_image_alt ?? (a.hero_image_url ? a.title : "")} priority={priority} sizes={sizes} className={className} />
+      <ImageCredit a={a} />
+    </figure>
+  );
+}
+
+export function ImageCredit({ a }: { a: Pick<Article, "hero_image_url" | "hero_image_credit"> }) {
+  return (
+    <figcaption className="mt-1.5 font-mono text-[10.5px] text-muted">
+      {a.hero_image_url ? (
+        <>Image: {a.hero_image_credit ?? "credit pending"}</>
+      ) : (
+        <>Image: [Studio / Official Press] · awaiting asset</>
+      )}
+    </figcaption>
   );
 }

@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 188 36" width="376" height="72" role="img" aria-label="UNPATCHED.GG">
+  <title>UNPATCHED.GG</title>
+  <path fill="#F6F3EE" fill-rule="evenodd" transform="translate(0 0)" d="M0 0H5V10L0 13Z M0 16.4L5 13.4V25H9V0H14V30H0Z"/>
+  <path fill="#F6F3EE" fill-rule="evenodd" transform="translate(16.6 0)" d="M0 30V0H5L9 13.5V0H14V30H9L5 16.5V30Z"/>
+  <path fill="#F6F3EE" fill-rule="evenodd" transform="translate(33.2 0)" d="M0 0H14V18H5V30H0Z M5 5V13H9V5Z"/>
+  <path fill="#F6F3EE" fill-rule="evenodd" transform="translate(49.8 0)" d="M0 30V0H14V30H9V19.5H5V30Z M5 5V14.5H9V5Z"/>
+  <path fill="#F6F3EE" fill-rule="evenodd" transform="translate(66.4 0)" d="M0 0H14V5H9.5V30H4.5V5H0Z"/>
+  <path fill="#F6F3EE" fill-rule="evenodd" transform="translate(83 0)" d="M0 0H14V8H9V5H5V25H9V22H14V30H0Z"/>
+  <path fill="#F6F3EE" fill-rule="evenodd" transform="translate(99.6 0)" d="M0 0H5V12.5H9V0H14V30H9V17.5H5V30H0Z"/>
+  <path fill="#F6F3EE" fill-rule="evenodd" transform="translate(116.2 0)" d="M0 0H14V5H5V12.5H12V17.5H5V25H14V30H0Z"/>
+  <path fill="#F6F3EE" fill-rule="evenodd" transform="translate(132.8 0)" d="M0 0H10L14 4V26L10 30H0Z M5 5V25H8L9 24V6L8 5Z"/>
+  <path fill="#FF2E93" fill-rule="evenodd" transform="translate(149.4 0)" d="M0 25H5V30H0Z"/>
+  <path fill="#FF2E93" fill-rule="evenodd" transform="translate(157 0)" d="M0 0H14V8H9V5H5V25H9V18.5H7V13.5H14V30H0Z"/>
+  <path fill="#FF2E93" fill-rule="evenodd" transform="translate(173.6 0)" d="M0 0H14V8H9V5H5V25H9V18.5H7V13.5H14V30H0Z"/>
+  <rect x="0" y="33" width="188" height="2" fill="#F5B700"/>
+</svg>

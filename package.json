@@ -1,8 +1,8 @@
 {
-  "name": "trueframe-web",
+  "name": "unpatched-gg",
   "version": "0.1.0",
   "private": true,
-  "description": "TrueFrame — First-Party Truth. Real Hype.",
+  "description": "UNPATCHED.GG: First-Party Truth. Real Hype.",
   "scripts": {
     "dev": "next dev",
     "build": "next build",

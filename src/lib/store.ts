@@ -29,7 +29,7 @@ export const storeMode = () => (supabase() ? "supabase" : "memory");
  */
 export function writeBlockedReason(): string | null {
   if (supabase()) return null;
-  if (process.env.NODE_ENV !== "production" || process.env.TRUEFRAME_ALLOW_MEMORY_WRITES === "1") return null;
+  if (process.env.NODE_ENV !== "production" || process.env.UNPATCHED_ALLOW_MEMORY_WRITES === "1") return null;
   return "Supabase is not configured (SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY). Writes are disabled so nothing is silently lost.";
 }
 

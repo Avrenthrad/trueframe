@@ -19,9 +19,9 @@ export default async function VideosPage() {
   const shorts = withVideo.filter((a) => a.video!.aspect === "9:16");
 
   return (
-    <div className="tf-container space-y-12 pt-8 pb-10">
+    <div className="up-container space-y-12 pt-8 pb-10">
       <header className="space-y-3">
-        <p className="tf-eyebrow">Click to play · Zero autoplay</p>
+        <p className="up-eyebrow">Click to play · Zero autoplay</p>
         <h1 className="text-4xl font-bold sm:text-5xl">Videos</h1>
         <p className="max-w-[60ch] text-muted">Nothing loads from YouTube until you press play, so this page stays fast.</p>
       </header>
@@ -34,7 +34,7 @@ export default async function VideosPage() {
               <li key={a.slug} className="space-y-3">
                 <VideoEmbed video={a.video!} />
                 <div className="flex items-start justify-between gap-3">
-                  <Link href={articlePath(a)} className="font-semibold leading-snug hover:text-mint-text">{a.title}</Link>
+                  <Link href={articlePath(a)} className="font-semibold leading-snug hover:text-accent-text">{a.title}</Link>
                   <SourceTierPill tier={a.source_tier} compact />
                 </div>
               </li>
@@ -50,7 +50,7 @@ export default async function VideosPage() {
             {shorts.map((a) => (
               <li key={a.slug} className="space-y-2">
                 <VideoEmbed video={a.video!} />
-                <Link href={articlePath(a)} className="line-clamp-2 text-sm font-semibold hover:text-mint-text">{a.title}</Link>
+                <Link href={articlePath(a)} className="line-clamp-2 text-sm font-semibold hover:text-accent-text">{a.title}</Link>
               </li>
             ))}
           </ul>

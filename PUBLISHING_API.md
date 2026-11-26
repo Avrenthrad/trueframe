@@ -1,4 +1,4 @@
-# TrueFrame Publishing API
+# UNPATCHED.GG Publishing API
 
 Two entry points:
 
@@ -10,7 +10,7 @@ Two entry points:
 Every successful write instantly revalidates `/`, the category feed, the article, `/feed.xml`, `/sitemap.xml` and `/news-sitemap.xml`. Nothing is rebuilt.
 
 ```bash
-export TF=https://your-domain.com.au
+export TF=https://unpatched.gg
 export PUBLISH_API_KEY=…   # from Vercel env
 export INTAKE_SECRET=…
 ```
@@ -21,7 +21,7 @@ export INTAKE_SECRET=…
 
 **Required:** `title`, `slug` (lowercase-kebab), `tldr_answer`, `category` (`news | review | guide | deal | hub`), `source_tier` (`first_party_official | verified_report | unconfirmed_rumor`), `primary_source_name`, `primary_source_url` (https), `updated_at` (ISO 8601 with offset), `author` (string or `{ name, url? }`).
 
-**Common optional:** `status` (`draft` default · `scheduled` · `published`), `published_at`, `vertical` (`games` default · `film_tv`), `excerpt`, `body_md` (Markdown), `hero_image_url`, `hero_image_alt`, `tags[]`, `platforms[]`, `faq[{q,a}]`, `video{provider:'youtube'|'mp4', src, aspect:'16:9'|'9:16', title, duration?}`, `gallery[{url,alt}]`.
+**Common optional:** `status` (`draft` default · `scheduled` · `published`), `published_at`, `vertical` (`games` default · `film_tv` · `anime`, which sets the desk: Games Desk / Movies & TV / Anime), `is_breaking` (pink BREAKING tag; confirmed news only), `excerpt`, `body_md` (Markdown), `hero_image_url`, `hero_image_alt`, `hero_image_credit` (shown as `Image: …`, e.g. `"Ironvale Studios / Official Press"`), `tags[]`, `platforms[]`, `faq[{q,a}]`, `video{provider:'youtube'|'mp4', src, aspect:'16:9'|'9:16', title, duration?}`, `gallery[{url,alt,credit?}]`.
 
 **Rich blocks:**
 - `spoiler_warning: { enabled, label }`
@@ -36,11 +36,13 @@ export INTAKE_SECRET=…
 2. `unconfirmed_rumor` headlines must signal uncertainty ("Rumour:", "reportedly", "leak", "claims", or a question). Reviews and deals can't be rumours.
 3. Deals must be real discounts (`price_aud < rrp_aud`).
 4. `scheduled` needs a `published_at`, and `updated_at` can't predate a past `published_at`.
+5. `is_breaking` is only allowed on confirmed news (`category: news`, not `unconfirmed_rumor`).
 
 **Server behaviour:**
 - **Human gate:** a `review` with `human_approved !== true` is always saved as `draft` (`"gated": true` in the response). News, explainers, guides, deals and hubs publish fully automatically.
 - `published` with a future `published_at` becomes `scheduled`. `published` with no `published_at` is stamped with the current time.
 - Markdown/HTML is sanitised: `<script>`, `<iframe>`, `<style>`, `on*=` handlers and `javascript:` links are removed.
+- A `hero_image_url` without `hero_image_credit` publishes with a warning, and the page shows `Image: credit pending` until you PATCH a credit in.
 - `hero_image_url` is mirrored into Supabase Storage (≤ 8 MB, jpeg/png/webp/avif/gif). If mirroring fails, the original URL is kept and a warning is returned. An image never blocks a publish.
 
 **Responses:** `201` created · `200` updated · `401` auth · `409` duplicate slug · `413` too large · `422` validation (`issues: [{ path, message }]`) · `503` store unavailable.
@@ -69,6 +71,8 @@ curl -sS -X POST "$TF/api/publish" \
     "tldr_answer": "Yes. It now launches 19 March 2027 on PS5, Xbox Series X|S and PC. Pre-orders carry over automatically.",
     "hero_image_url": "https://press.ironvale.example/key-art.jpg",
     "hero_image_alt": "Ironvale: Rising key art",
+    "hero_image_credit": "Ironvale Studios / Official Press",
+    "is_breaking": true,
     "hype_vs_reality": {
       "confirmed_facts": ["New date: 19 March 2027", "Pre-orders carry over"],
       "our_expectations": ["Final trailer around The Game Awards"]

@@ -1,7 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 32" width="220" height="32" role="img" aria-label="TrueFrame">
-  <path fill="#00E599" d="M3 3h9v3.5H6.5V12H3z M3 29v-9h3.5v5.5H12V29z M29 3v6.5h-3.5V6.5H20V3z M29 29v-6.5h-3.5v3H20V29z"/>
-  <path fill="#00E599" d="M13.5 9.5 29 16 13.5 22.5z"/>
-  <text x="40" y="24" font-family="'Space Grotesk', 'Space Grotesk Variable', ui-sans-serif, system-ui, sans-serif" font-weight="700" font-size="23" letter-spacing="-0.2">
-    <tspan fill="#F4F6F8">TRUE</tspan><tspan fill="#00E599">FRAME</tspan>
-  </text>
-</svg>

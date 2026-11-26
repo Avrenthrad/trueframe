@@ -40,15 +40,15 @@ export default async function DealsPage() {
     .sort((x, y) => Number(x.expired) - Number(y.expired) || y.pct - x.pct);
 
   return (
-    <div className="tf-container space-y-6 pt-8 pb-10">
+    <div className="up-container space-y-6 pt-8 pb-10">
       <header className="space-y-3">
-        <p className="tf-eyebrow">Price-checked · Updated daily</p>
+        <p className="up-eyebrow">Price-checked · Updated daily</p>
         <h1 className="text-4xl font-bold sm:text-5xl">AU &amp; Global Deals</h1>
         <p className="max-w-[62ch] text-muted">
           Real discounts only. Every price is checked against the retailer listing and compared to RRP. We never list a full-price item as a deal.
         </p>
-        <p className="rounded-lg border border-line bg-surface px-3 py-2 text-[13px] text-muted">
-          <strong className="text-fg">Affiliate disclosure:</strong> retailer links on this page are affiliate links. If you buy, TrueFrame may earn a small commission at no
+        <p className="border border-line bg-surface px-3 py-2 text-[13px] text-muted">
+          <strong className="text-fg">Affiliate disclosure:</strong> retailer links on this page are affiliate links. If you buy, UNPATCHED.GG may earn a small commission at no
           extra cost to you. Commissions never influence which deals we list or how we score games.
         </p>
       </header>

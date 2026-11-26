@@ -24,7 +24,7 @@ export function TableOfContents({ items }: { items: TocItem[] }) {
   if (items.length < 2) return null;
   return (
     <nav aria-label="Jump to section" className="text-sm">
-      <p className="tf-eyebrow mb-3">Jump to</p>
+      <p className="up-eyebrow mb-3">Jump to</p>
       <ol className="space-y-0.5 border-l border-line">
         {items.map((i) => (
           <li key={i.id}>
@@ -32,7 +32,7 @@ export function TableOfContents({ items }: { items: TocItem[] }) {
               href={`#${i.id}`}
               aria-current={active === i.id ? "location" : undefined}
               className={`-ml-px block border-l-2 py-1.5 leading-snug transition-colors ${i.level === 3 ? "pl-6" : "pl-3"} ${
-                active === i.id ? "border-mint font-medium text-fg" : "border-transparent text-muted hover:text-fg"
+                active === i.id ? "border-accent font-medium text-fg" : "border-transparent text-muted hover:text-fg"
               }`}
             >
               {i.text}
@@ -55,9 +55,9 @@ export function VideoEmbed({ video }: { video: Video }) {
   if (demo) {
     return (
       <figure className={vertical ? "flex flex-col items-center" : ""}>
-        <div className={`relative grid place-items-center overflow-hidden rounded-xl border border-dashed border-line-strong bg-surface ${box}`}>
+        <div className={`relative grid place-items-center overflow-hidden border border-dashed border-line-strong bg-surface ${box}`}>
           <div className="space-y-2 p-4 text-center">
-            <span className="mx-auto grid size-12 place-items-center rounded-full border border-line-strong text-muted"><IconPlay className="size-5 translate-x-0.5" /></span>
+            <span className="mx-auto grid size-12 place-items-center border border-line-strong text-muted"><IconPlay className="size-5 translate-x-0.5" /></span>
             <p className="font-mono text-[11px] tracking-wide text-muted uppercase">{video.aspect} video slot · demo</p>
             <p className="text-xs text-muted">Publish a real YouTube ID or MP4 via the API.</p>
           </div>
@@ -68,7 +68,7 @@ export function VideoEmbed({ video }: { video: Video }) {
   }
   return (
     <figure className={vertical ? "flex flex-col items-center" : ""}>
-      <div className={`relative overflow-hidden rounded-xl border border-line bg-[#06080c] ${box}`}>
+      <div className={`relative overflow-hidden border border-line bg-black ${box}`}>
         {on ? (
           video.provider === "youtube" ? (
             <iframe
@@ -86,17 +86,17 @@ export function VideoEmbed({ video }: { video: Video }) {
             {thumb && (
               <img src={thumb} alt="" loading="lazy" className="absolute inset-0 size-full object-cover opacity-60 transition-opacity group-hover:opacity-75" />
             )}
-            <span className="relative grid size-16 place-items-center rounded-full bg-mint text-on-mint shadow-lg transition-transform group-hover:scale-105">
+            <span className="relative grid size-16 place-items-center bg-accent text-on-accent transition-transform group-hover:scale-105">
               <IconPlay className="size-6 translate-x-0.5 fill-current" />
             </span>
             {video.duration && (
-              <span className="absolute right-3 bottom-3 rounded bg-black/75 px-1.5 py-0.5 font-mono text-[11px] text-white">{video.duration}</span>
+              <span className="absolute right-3 bottom-3 bg-black/75 px-1.5 py-0.5 font-mono text-[11px] text-white">{video.duration}</span>
             )}
           </button>
         )}
       </div>
       <figcaption className="mt-2 flex items-center gap-2 font-mono text-[11px] text-muted">
-        <span className="rounded border border-line px-1 py-px">{video.aspect}</span> {video.title}
+        <span className="border border-line px-1 py-px">{video.aspect}</span> {video.title}
       </figcaption>
     </figure>
   );
@@ -108,7 +108,7 @@ export function Checklist({ title, items, storageKey }: { title: string; items: 
   const [copied, setCopied] = useState(false);
   useEffect(() => {
     try {
-      const raw = localStorage.getItem(`tf-check-${storageKey}`);
+      const raw = localStorage.getItem(`up-check-${storageKey}`);
       if (raw) setDone(new Set(JSON.parse(raw)));
     } catch {}
   }, [storageKey]);
@@ -118,7 +118,7 @@ export function Checklist({ title, items, storageKey }: { title: string; items: 
       if (next.has(i)) next.delete(i);
       else next.add(i);
       try {
-        localStorage.setItem(`tf-check-${storageKey}`, JSON.stringify([...next]));
+        localStorage.setItem(`up-check-${storageKey}`, JSON.stringify([...next]));
       } catch {}
       return next;
     });
@@ -132,24 +132,24 @@ export function Checklist({ title, items, storageKey }: { title: string; items: 
     } catch {}
   };
   return (
-    <section aria-labelledby={`cl-${storageKey}`} className="tf-card p-4">
+    <section aria-labelledby={`cl-${storageKey}`} className="up-card p-4">
       <div className="mb-3 flex items-center justify-between gap-3">
         <h2 id={`cl-${storageKey}`} className="text-base font-bold">
           {title} <span className="ml-1 font-mono text-xs font-normal text-muted">{done.size}/{items.length}</span>
         </h2>
-        <button type="button" onClick={copy} className="inline-flex items-center gap-1.5 rounded-md border border-line px-2.5 py-1 font-mono text-[11px] text-muted hover:border-mint hover:text-fg">
-          {copied ? <IconCheck className="size-3.5 text-mint-text" /> : <IconCopy className="size-3.5" />}
+        <button type="button" onClick={copy} className="inline-flex items-center gap-1.5 border border-line px-2.5 py-1 font-mono text-[11px] text-muted hover:border-accent hover:text-fg">
+          {copied ? <IconCheck className="size-3.5 text-accent-text" /> : <IconCopy className="size-3.5" />}
           {copied ? "Copied" : "Copy list"}
         </button>
       </div>
-      <div className="mb-3 h-1 overflow-hidden rounded-full bg-elevated" aria-hidden>
-        <div className="h-full bg-mint transition-[width]" style={{ width: `${(done.size / Math.max(items.length, 1)) * 100}%` }} />
+      <div className="mb-3 h-1 overflow-hidden bg-elevated" aria-hidden>
+        <div className="h-full bg-accent transition-[width]" style={{ width: `${(done.size / Math.max(items.length, 1)) * 100}%` }} />
       </div>
       <ul className="space-y-1">
         {items.map((t, i) => (
           <li key={t}>
-            <label className="flex cursor-pointer items-center gap-3 rounded-md px-1.5 py-1.5 hover:bg-elevated">
-              <input type="checkbox" checked={done.has(i)} onChange={() => toggle(i)} className="size-4 accent-[var(--tf-mint)]" />
+            <label className="flex cursor-pointer items-center gap-3 px-1.5 py-1.5 hover:bg-elevated">
+              <input type="checkbox" checked={done.has(i)} onChange={() => toggle(i)} className="size-4 accent-[var(--up-accent)]" />
               <span className={`text-sm ${done.has(i) ? "text-muted line-through" : ""}`}>{t}</span>
             </label>
           </li>

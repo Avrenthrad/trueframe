@@ -40,3 +40,11 @@ export function aud(n: number) {
 export function percentOff(price: number, rrp: number) {
   return Math.round((1 - price / rrp) * 100);
 }
+
+/** Wire-style stamp: "26 Nov 09:42" in AU time. */
+export function wireStamp(iso: string) {
+  const d = new Date(iso);
+  const day = new Intl.DateTimeFormat("en-AU", { timeZone: TZ, day: "numeric", month: "short" }).format(d);
+  const clock = new Intl.DateTimeFormat("en-AU", { timeZone: TZ, hour: "2-digit", minute: "2-digit", hourCycle: "h23" }).format(d);
+  return { day, clock, label: `${day} ${clock}` };
+}

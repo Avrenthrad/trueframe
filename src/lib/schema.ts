@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 /* ────────────────────────────────────────────────────────────────────────────
- * TrueFrame content schema.
+ * UNPATCHED.GG content schema.
  *
  * Brand rule: primary first-party sources are the first truth. Every article
  * names the source it rests on, states how verified that source is, and leads
@@ -12,7 +12,7 @@ import { z } from "zod";
 export const CATEGORIES = ["news", "review", "guide", "deal", "hub"] as const;
 export const SOURCE_TIERS = ["first_party_official", "verified_report", "unconfirmed_rumor"] as const;
 export const STATUSES = ["draft", "scheduled", "published"] as const;
-export const VERTICALS = ["games", "film_tv"] as const;
+export const VERTICALS = ["games", "film_tv", "anime"] as const;
 export const VERDICTS = ["Buy", "Wait", "Skip"] as const;
 export const REGIONS = ["AU", "Global"] as const;
 
@@ -120,7 +120,7 @@ export const videoSchema = z.object({
 
 export const faqSchema = z.array(z.object({ q: text(300), a: text(2000) })).max(20);
 
-export const imageSchema = z.object({ url: httpsUrl, alt: text(200) });
+export const imageSchema = z.object({ url: httpsUrl, alt: text(200), credit: text(160).optional() });
 
 /** Fields shared by create (POST) input and stored articles. */
 const articleShape = {
@@ -142,6 +142,10 @@ const articleShape = {
   body_md: z.string().max(200_000).default(""),
   hero_image_url: httpsUrl.nullable().optional(),
   hero_image_alt: text(200).optional(),
+  /** Credit line shown under the image, e.g. "Ironvale Studios / Official Press". */
+  hero_image_credit: text(160).optional(),
+  /** Editor-set flag for the pink BREAKING tag. Never inferred automatically. */
+  is_breaking: z.boolean().default(false),
   tags: z.array(text(40)).max(20).default([]),
   platforms: z.array(text(40)).max(10).default([]),
 
@@ -201,7 +205,12 @@ export function editorialRules(a: Partial<BaseArticle>, ctx: z.RefinementCtx) {
     issue("published_at", "scheduled articles need a future published_at ISO timestamp.");
   }
 
-  // 6. Spoilers must be explicit.
+  // 6. Breaking is reserved for confirmed news, never rumours.
+  if (a.is_breaking && (a.category !== "news" || a.source_tier === "unconfirmed_rumor")) {
+    issue("is_breaking", "is_breaking is only allowed on confirmed news (category=news, not unconfirmed_rumor).");
+  }
+
+  // 7. Spoilers must be explicit.
   if (a.spoiler_warning?.enabled && !a.spoiler_warning.label) {
     issue("spoiler_warning", "spoiler_warning.label is required when enabled.");
   }

@@ -62,7 +62,7 @@ export function slugify(s: string) {
 function expandSpoilers(md: string) {
   return md.replace(/^:::spoiler[ \t]*(.*)\n([\s\S]*?)\n:::[ \t]*$/gm, (_m, title: string, inner: string) => {
     const t = sanitizeHtml(title || "Spoiler", { allowedTags: [] });
-    return `<details class="tf-spoiler"><summary class="tf-spoiler-summary">${t}</summary>\n\n${inner}\n\n</details>`;
+    return `<details class="up-spoiler"><summary class="up-spoiler-summary">${t}</summary>\n\n${inner}\n\n</details>`;
   });
 }
 

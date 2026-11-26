@@ -18,7 +18,7 @@ import { absoluteUrl, articlePath } from "./site";
 /* Shared publish pipeline used by /api/publish and /api/intake. */
 
 export const json = (status: number, body: Record<string, unknown>) =>
-  NextResponse.json(body, { status, headers: { "Cache-Control": "no-store", "X-TrueFrame-Store": storeMode() } });
+  NextResponse.json(body, { status, headers: { "Cache-Control": "no-store", "X-Unpatched-Store": storeMode() } });
 
 /** 503 when the backing store can't durably persist writes. */
 export function writeGuard() {
@@ -78,6 +78,10 @@ async function finalise(data: ArticleData, now: Date): Promise<Finalised> {
 
   if (a.deal_meta?.expires_at && Date.parse(a.deal_meta.expires_at) < now.getTime()) {
     warnings.push("deal_meta.expires_at is in the past. The deal will display as expired.");
+  }
+
+  if (a.hero_image_url && !a.hero_image_credit) {
+    warnings.push("hero_image_credit is missing. Every image needs a credit line, e.g. \"Ironvale Studios / Official Press\".");
   }
 
   if (a.hero_image_url) {
